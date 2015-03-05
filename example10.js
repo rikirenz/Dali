@@ -38,8 +38,8 @@ window.addEventListener('load', function () {
     canvas.addEventListener('mousemove', ev_canvas, false);
     canvas.addEventListener('mouseup',   ev_canvas, false);
 
-
-
+    // set the default style of default tool button
+    $('#'+currentTool).css({ 'color': color_black});
     // set listener for draw tools
     $('#tools .btn').click(function() { 
       $('#'+currentTool).css({ 'color': color_white});
