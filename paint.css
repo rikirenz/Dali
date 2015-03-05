@@ -1,0 +1,29 @@
+#title { 
+    margin-top: 0px;
+}
+#title-case { 
+    padding-top: 0px;
+    padding-bottom: 0px;
+    text-align: right;
+}
+#title-tools{ 
+    padding-left: 20px;
+}
+
+#tools{
+	text-align: left;
+}
+
+#container { position: relative; }
+#imageView { border: 1px solid #000; }
+#imageTemp { position: absolute; top: 1px; left: 1px; }
+
+
+input[type=range][orient=vertical]
+{
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 8px;
+    height: 175px;
+    padding: 0 5px;
+}
