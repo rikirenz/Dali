@@ -6,9 +6,10 @@ window.addEventListener('load', function () {
 
   // The active tool instance.
   var tool;
-  var tool_default = 'line';
-  var nodeColor = '#434A54';
+  var currentTool = 'line';
+  var color_black = '#434A54'
   var color_white='#F5F7FA'
+  var nodeColor = color_black;
   var widthLine = 5;
   var fill = false;
 
@@ -37,8 +38,21 @@ window.addEventListener('load', function () {
     canvas.addEventListener('mousemove', ev_canvas, false);
     canvas.addEventListener('mouseup',   ev_canvas, false);
 
+
+
     // set listener for draw tools
-    $('#tools .btn').click(function() { tool = new tools[this.id](); });
+    $('#tools .btn').click(function() { 
+      $('#'+currentTool).css({ 'color': color_white});
+      // deselect old color
+      //nononono$('#tools .btn').css({ 'color': color_black});
+      $('#'+this.id).css({ 'color': color_black});
+      // select new color
+
+      tool = new tools[this.id](); 
+
+      currentTool = this.id;
+
+    });
 
     // New Painting
     $('#remove').click(function() { contexto.clearRect(0, 0, canvas.width, canvas.height);});
@@ -81,8 +95,6 @@ window.addEventListener('load', function () {
       }
     });
 
-    // Activate the default tool
-    tool = new tools[tool_default]();
   }
 
   // The general-purpose event handler. 
