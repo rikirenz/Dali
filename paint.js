@@ -1,10 +1,8 @@
-// Keep everything in anonymous function, called on window load.
-if(window.addEventListener) {
+// when the page is loded
 window.addEventListener('load', function () {
 
   var canvas, context, canvaso, contexto;
 
-  // The active tool instance.
   var tool;
   var currentTool = 'line';
   var color_black = '#434A54'
@@ -21,18 +19,19 @@ window.addEventListener('load', function () {
     // Get the 2D canvas context 
     contexto = canvaso.getContext('2d'); 
 
-    // Add the temporary canvas.
+    // Add the temporary canvas to draw
     var container = canvaso.parentNode;
     canvas = document.createElement('canvas');
-
     // set data of canvas node - insert new canvas
     canvas.id     = 'imageTemp';
     canvas.width  = canvaso.width;
     canvas.height = canvaso.height;
-    container.appendChild(canvas); // set the canvas 
+    container.appendChild(canvas);  
+    // object that define how to draw on the canvas
     context = canvas.getContext('2d');
     context.lineWidth=widthLine;
     context.strokeStyle = nodeColor;    
+
     // Attach the mousedown, mousemove and mouseup event listeners to canvas obj.
     canvas.addEventListener('mousedown', ev_canvas, false);
     canvas.addEventListener('mousemove', ev_canvas, false);
@@ -40,35 +39,36 @@ window.addEventListener('load', function () {
 
     // set the default style of default tool button
     $('#'+currentTool).css({ 'color': color_black});
+    // set the default tool (line)
+    tool = new tools[currentTool](); 
+
     // set listener for draw tools
     $('#tools .btn').click(function() { 
+      // deselect old tool
       $('#'+currentTool).css({ 'color': color_white});
-      // deselect old color
-      //nononono$('#tools .btn').css({ 'color': color_black});
+      // select new tool      
       $('#'+this.id).css({ 'color': color_black});
-      // select new color
 
+      // select new current tool
       tool = new tools[this.id](); 
-
       currentTool = this.id;
-
     });
 
     // New Painting
     $('#remove').click(function() { contexto.clearRect(0, 0, canvas.width, canvas.height);});
 
+
     // set default color
     $('#\\'+ nodeColor +' h4').css({ 'color':color_white});
-
     // set listener for color set
     $('#colors .btn').click(function() { 
       // deselect old color
       if (nodeColor) $('#\\'+ nodeColor +' h4').css({ 'color': nodeColor});
-
       // select new color
       nodeColor = this.id;
       $('#\\'+ nodeColor +' h4').css({ 'color': color_white});
       context.strokeStyle = nodeColor;
+      // reset the tint
       $( "#tint" ).trigger( "click" );
       $( "#tint" ).trigger( "click" );
 
@@ -88,7 +88,6 @@ window.addEventListener('load', function () {
       if (fill){
         fill = false;
         $('#tint i').css({ 'color':color_white});
-        // se è la seconda volta che lo clicchiamo torna bianco
       }else{
         $('#tint  i').css({ 'color':nodeColor});
         fill = true;        
@@ -102,8 +101,8 @@ window.addEventListener('load', function () {
   function ev_canvas (ev) {
     ev._x = ev.layerX;
     ev._y = ev.layerY;
-
-    // Call the event handler of the tool. ???
+    // Call the event handler of the tool
+    //In base on the function implmentated in a specific tool
     var func = tool[ev.type];
     if (func) func(ev);
   }
@@ -250,13 +249,10 @@ window.addEventListener('load', function () {
       if (!tool.started) {
         return;
       }
-
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.beginPath();
-
-      diametro = ev._x - tool.x0;
-      if (diametro < 0) diametro*-1;
-      context.arc(ev._x, ev._y, diametro, 0, 2 * Math.PI, false);
+      diameter = Math.abs(ev._x - tool.x0);
+      context.arc(ev._x, ev._y, diameter, 0, 2 * Math.PI, false);
       context.stroke();
       if (fill){
           context.fillStyle = nodeColor;
@@ -276,5 +272,5 @@ window.addEventListener('load', function () {
 
   init();
 
-}, false); }
+}, false);
 
